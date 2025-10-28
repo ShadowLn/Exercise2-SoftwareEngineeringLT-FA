@@ -1,27 +1,26 @@
-name: Python CI Pipeline
+# .gitlab-ci.yml
+stages:
+  - build
+  - test
+  - deploy
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+# Build stage
+build:
+  stage: build
+  script:
+    - echo "Building the project..."
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+# Test stage
+test:
+  stage: test
+  script:
+    - echo "Running tests..."
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if exist requirements.txt (pip install -r requirements.txt)
-
-      - name: Run app
-        run: python app.py
+# Deploy stage
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying application..."
+    
+  only:
+    - main  # deploy only when committing to the main branch

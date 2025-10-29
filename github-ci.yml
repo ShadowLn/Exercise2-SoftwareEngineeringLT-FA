@@ -1,26 +1,28 @@
-# .gitlab-ci.yml
-stages:
-  - build
-  - test
-  - deploy
+name: Python CI Pipeline
 
-# Build stage
-build:
-  stage: build
-  script:
-    - echo "Building the project..."
+on:
+  push:
+    branches: [main]
+  pull_request:
 
-# Test stage
-test:
-  stage: test
-  script:
-    - echo "Running tests..."
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Building the project..."
 
-# Deploy stage
-deploy:
-  stage: deploy
-  script:
-    - echo "Deploying application..."
-    
-  only:
-    - main  # deploy only when committing to the main branch
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Running tests..."
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Deploying application..."

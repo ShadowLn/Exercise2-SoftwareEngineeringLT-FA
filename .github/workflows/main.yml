@@ -1,4 +1,4 @@
-name: CI/CD Flask Deployment
+name: CI/CD Pipeline
 
 on:
   push:
@@ -7,17 +7,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create target directory on server
+      - name: Create folder on server
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.TARGET_DIR }}"
 
       - name: Upload files to server
